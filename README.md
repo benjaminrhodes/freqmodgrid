@@ -6,7 +6,7 @@ FreqmodGrid aims to make FM synthesis accessible. Instead of requiring deep theo
 
 ## Status
 
-**In active development.** The DSP engine and plugin wrapper are functional. No GUI yet.
+**Functional.** The DSP engine is complete and builds successfully. No GUI yet - parameters are automatable but not visible.
 
 What works today:
 - Full 6-operator FM synthesis engine
@@ -19,13 +19,37 @@ What works today:
 - VST3 and AU output via iPlug2
 
 What's not done:
-- Visual grid UI
-- Preset browser / randomize
+- GUI (parameters work but no visual interface)
+- Preset browser in GUI
 - MPE support
 - Stereo effects chain
 - Oversampling for offline render
 
 ## Building
+
+### Build & Install
+
+```bash
+# Clone and setup
+git clone https://github.com/benjaminrhodes/freqmodgrid.git
+cd freqmodgrid
+git submodule update --init --recursive
+
+# Build
+mkdir build && cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release
+cmake --build . --config Release --target FreqmodGrid-vst3
+
+# Install (macOS)
+cp -r out/FreqmodGrid.vst3 ~/Library/Audio/Plug-Ins/VST3/
+```
+
+### Usage in DAW
+
+1. Rescan plugins in your DAW
+2. Add FreqmodGrid as an instrument
+3. Send MIDI notes to play
+4. Automate parameters via MIDI CC or host automation
 
 ### Requirements
 

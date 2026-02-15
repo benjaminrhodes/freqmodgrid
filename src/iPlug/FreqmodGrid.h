@@ -22,9 +22,8 @@ public:
   void ProcessMidiMsg(const IMidiMsg& msg) override;
   void OnReset() override;
   void OnParamChange(int paramIdx) override;
-  void OnIdle() override;
 
 private:
-  FreqmodGridDSP<sample> mDSP {8};
+  FreqmodGridDSP<sample> mDSP {16};
 #endif
 };

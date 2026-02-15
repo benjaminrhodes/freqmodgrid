@@ -2,23 +2,18 @@
 #define OPERATOR_H
 
 #include <cmath>
-#include <algorithm>
-#include <limits>
-
-template<typename T>
-constexpr const T& clamp(const T& v, const T& lo, const T& hi) {
-    return (v < lo) ? lo : (hi < v) ? hi : v;
-}
 
 class Operator {
 public:
     Operator() : ratio_(1.0f), level_(0.5f), feedback_(0.0f), detune_(0.0f),
-                 phase_(0.0f), output_(0.0f), feedbackSample_(0.0f) {}
+                 phase_(0.0f), output_(0.0f), feedbackSample_(0.0f),
+                 modulatorInput_(0.0f), baseFreq_(0.0f), sampleRate_(48000.0f),
+                 increment_(0.0f) {}
 
-    void setRatio(float ratio) { ratio_ = clamp(ratio, 0.25f, 32.0f); }
-    void setLevel(float level) { level_ = clamp(level, 0.0f, 1.0f); }
-    void setFeedback(float fb) { feedback_ = clamp(fb, 0.0f, 1.0f); }
-    void setDetune(float cents) { detune_ = clamp(cents, -100.0f, 100.0f); }
+    void setRatio(float ratio) { ratio_ = clampf(ratio, 0.25f, 32.0f); }
+    void setLevel(float level) { level_ = clampf(level, 0.0f, 1.0f); }
+    void setFeedback(float fb) { feedback_ = clampf(fb, 0.0f, 1.0f); }
+    void setDetune(float cents) { detune_ = clampf(cents, -100.0f, 100.0f); }
 
     float getRatio() const { return ratio_; }
     float getLevel() const { return level_; }
@@ -39,11 +34,12 @@ public:
     void process() {
         phase_ += increment_;
         if (phase_ >= 1.0f) phase_ -= 1.0f;
+        if (phase_ < 0.0f) phase_ += 1.0f;
 
         float fb = feedback_ * feedbackSample_ * 5.0f;
-        float phasePos = phase_ + fb;
-        
-        output_ = level_ * fastSin(phasePos * 6.28318530718f + modulatorInput_);
+        float totalPhase = phase_ * 6.28318530718f + fb + modulatorInput_;
+
+        output_ = level_ * fastSin(totalPhase);
         feedbackSample_ = output_;
     }
 
@@ -57,16 +53,27 @@ public:
     }
 
 private:
+    // Bhaskara I approximation — accurate across full [0, 2pi] range
     static inline float fastSin(float x) {
-        x = fmodf(x, 6.28318530718f);
-        if (x < 0) x += 6.28318530718f;
-        
-        float x2 = x * x;
-        float x3 = x2 * x;
-        float x5 = x3 * x2;
-        float x7 = x5 * x2;
-        
-        return x - (x3 / 6.0f) + (x5 / 120.0f) - (x7 / 5040.0f);
+        constexpr float TWO_PI = 6.28318530718f;
+        constexpr float PI = 3.14159265359f;
+
+        x = std::fmod(x, TWO_PI);
+        if (x < 0.0f) x += TWO_PI;
+
+        float sign = 1.0f;
+        if (x > PI) {
+            x -= PI;
+            sign = -1.0f;
+        }
+
+        // sin(x) ~ 16x(pi - x) / (5pi^2 - 4x(pi - x))  for x in [0, pi]
+        float xpi = x * (PI - x);
+        return sign * (16.0f * xpi) / (5.0f * PI * PI - 4.0f * xpi);
+    }
+
+    static inline float clampf(float v, float lo, float hi) {
+        return (v < lo) ? lo : (hi < v) ? hi : v;
     }
 
     float ratio_;

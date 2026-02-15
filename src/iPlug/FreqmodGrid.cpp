@@ -1,5 +1,6 @@
 #include "FreqmodGrid.h"
 #include "IPlug_include_in_plug_src.h"
+#include "IControls.h"
 
 FreqmodGrid::FreqmodGrid(const InstanceInfo& info)
 : Plugin(info, MakeConfig(kNumParams, kNumPresets))
@@ -32,16 +33,15 @@ FreqmodGrid::FreqmodGrid(const InstanceInfo& info)
   // Algorithm (0-7 internally, displayed 1-8)
   GetParam(kParamAlgorithm)->InitEnum("Algorithm", 0, 8, "",
     IParam::kFlagsNone, "",
-    "1: Serial", "2: (1+2)>Chain", "3: 1>All", "4: Pairs>Chain",
-    "5: 3 Pairs", "6: Groups", "7: 2 Chains", "8: All Parallel");
+    "1", "2", "3", "4", "5", "6", "7", "8");
 
   // Filter
   GetParam(kParamFilterType)->InitEnum("Filter Type", 0, 2, "",
-    IParam::kFlagsNone, "", "Low Pass", "High Pass");
+    IParam::kFlagsNone, "", "LP", "HP");
   GetParam(kParamFilterCutoff)->InitFrequency("Filter Cutoff", 12000., 20., 20000.);
   GetParam(kParamFilterRes)->InitDouble("Filter Resonance", 0., 0., 100., 1., "%");
 
-  // Envelope (times in ms for UI, converted to seconds in SetParam)
+  // Envelope
   GetParam(kParamAttack)->InitDouble("Attack", 10., 1., 5000., 0.1, "ms",
     IParam::kFlagsNone, "ADSR", IParam::ShapePowCurve(3.));
   GetParam(kParamDecay)->InitDouble("Decay", 100., 1., 5000., 0.1, "ms",
@@ -65,6 +65,115 @@ FreqmodGrid::FreqmodGrid(const InstanceInfo& info)
 
   // Master
   GetParam(kParamMasterVolume)->InitDouble("Master Volume", 70., 0., 100., 1., "%");
+
+#if IPLUG_EDITOR
+  mMakeGraphicsFunc = [&]() {
+    return MakeGraphics(*this, PLUG_WIDTH, PLUG_HEIGHT, PLUG_FPS, 1.0);
+  };
+  
+  mLayoutFunc = [&](IGraphics* pGraphics) {
+    pGraphics->AttachPanelBackground(IColor(255, 26, 26, 38));
+    
+    // Title
+    auto title = new ITextControl(IRECT(10, 5, 200, 25), "FREQMOD GRID", 
+      IText(14, EAlign::Center, IColor(255, 0, 212, 255)));
+    pGraphics->AttachControl(title);
+    
+    const IVStyle style = DEFAULT_STYLE;
+    
+    int y = 35;
+    
+    // Algorithm buttons
+    auto algoLabel = new ITextControl(IRECT(10, y, 100, y + 15), "ALGORITHM", 
+      IText(10, IColor(255, 200, 200, 210)));
+    pGraphics->AttachControl(algoLabel);
+    y += 18;
+    
+    for (int i = 0; i < 8; i++) {
+      int x = 10 + i * 42;
+      auto btn = new IVButtonControl(IRECT(x, y, x + 38, y + 25),
+        SplashClickActionFunc, std::to_string(i + 1).c_str(), style);
+      btn->SetParamIdx(i);
+      pGraphics->AttachControl(btn);
+    }
+    
+    y += 35;
+    
+    // Operators
+    int opX = 10;
+    for (int op = 0; op < 6; op++) {
+      char opName[16];
+      sprintf(opName, "OP%d", op + 1);
+      auto opLabel = new ITextControl(IRECT(opX, y, opX + 110, y + 15), opName, 
+        IText(10, EAlign::Center, IColor(255, 0, 212, 255)));
+      pGraphics->AttachControl(opLabel);
+      
+      int ratioParam = kParamOp1Ratio + (op * 3);
+      int levelParam = kParamOp1Level + (op * 3);
+      
+      pGraphics->AttachControl(new IVKnobControl(IRECT(opX + 10, y + 18, opX + 50, y + 58), ratioParam, "Ratio", style));
+      pGraphics->AttachControl(new IVKnobControl(IRECT(opX + 60, y + 18, opX + 100, y + 58), levelParam, "Lev", style));
+      
+      opX += 110;
+    }
+    
+    y += 70;
+    
+    // Filter
+    auto filterLabel = new ITextControl(IRECT(10, y, 80, y + 15), "FILTER", 
+      IText(10, IColor(255, 0, 212, 255)));
+    pGraphics->AttachControl(filterLabel);
+    pGraphics->AttachControl(new IVSwitchControl(IRECT(10, y + 18, 60, y + 38), kParamFilterType, "", style));
+    pGraphics->AttachControl(new IVKnobControl(IRECT(70, y + 18, 120, y + 58), kParamFilterCutoff, "Cutoff", style));
+    pGraphics->AttachControl(new IVKnobControl(IRECT(125, y + 18, 175, y + 58), kParamFilterRes, "Res", style));
+    
+    // Envelope
+    auto envLabel = new ITextControl(IRECT(200, y, 280, y + 15), "ENVELOPE", 
+      IText(10, IColor(255, 0, 212, 255)));
+    pGraphics->AttachControl(envLabel);
+    pGraphics->AttachControl(new IVKnobControl(IRECT(200, y + 18, 235, y + 50), kParamAttack, "A", style));
+    pGraphics->AttachControl(new IVKnobControl(IRECT(240, y + 18, 275, y + 50), kParamDecay, "D", style));
+    pGraphics->AttachControl(new IVKnobControl(IRECT(280, y + 18, 315, y + 50), kParamSustain, "S", style));
+    pGraphics->AttachControl(new IVKnobControl(IRECT(320, y + 18, 355, y + 50), kParamRelease, "R", style));
+    
+    // LFO 1
+    auto lfo1Label = new ITextControl(IRECT(380, y, 440, y + 15), "LFO 1", 
+      IText(10, IColor(255, 0, 212, 255)));
+    pGraphics->AttachControl(lfo1Label);
+    pGraphics->AttachControl(new IVKnobControl(IRECT(380, y + 18, 420, y + 50), kParamLFO1Rate, "Rate", style));
+    pGraphics->AttachControl(new IVKnobControl(IRECT(425, y + 18, 465, y + 50), kParamLFO1Depth, "Depth", style));
+    
+    // LFO 2
+    auto lfo2Label = new ITextControl(IRECT(490, y, 550, y + 15), "LFO 2", 
+      IText(10, IColor(255, 0, 212, 255)));
+    pGraphics->AttachControl(lfo2Label);
+    pGraphics->AttachControl(new IVKnobControl(IRECT(490, y + 18, 530, y + 50), kParamLFO2Rate, "Rate", style));
+    pGraphics->AttachControl(new IVKnobControl(IRECT(535, y + 18, 575, y + 50), kParamLFO2Depth, "Depth", style));
+    
+    y += 65;
+    
+    // Effects
+    auto fxLabel = new ITextControl(IRECT(10, y, 100, y + 15), "EFFECTS", 
+      IText(10, IColor(255, 0, 212, 255)));
+    pGraphics->AttachControl(fxLabel);
+    pGraphics->AttachControl(new IVKnobControl(IRECT(10, y + 18, 55, y + 55), kParamChorusRate, "Ch Rt", style));
+    pGraphics->AttachControl(new IVKnobControl(IRECT(60, y + 18, 105, y + 55), kParamChorusDepth, "Ch Dp", style));
+    pGraphics->AttachControl(new IVKnobControl(IRECT(110, y + 18, 155, y + 55), kParamDelayTime, "Del T", style));
+    pGraphics->AttachControl(new IVKnobControl(IRECT(160, y + 18, 205, y + 55), kParamDelayFeedback, "Del F", style));
+    
+    // Master
+    auto masterLabel = new ITextControl(IRECT(250, y, 320, y + 15), "MASTER", 
+      IText(10, IColor(255, 0, 212, 255)));
+    pGraphics->AttachControl(masterLabel);
+    pGraphics->AttachControl(new IVKnobControl(IRECT(250, y + 18, 320, y + 65), kParamMasterVolume, "Vol", style));
+    
+    // Randomize button
+    pGraphics->AttachControl(new IVButtonControl(IRECT(340, y + 25, 430, y + 50),
+      SplashClickActionFunc, "RND", style));
+    
+    pGraphics->SetScaleConstraints(0.75, 2.0);
+  };
+#endif
 }
 
 #if IPLUG_DSP

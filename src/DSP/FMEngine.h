@@ -482,7 +482,7 @@ private:
 
     // Global effects (post voice mixing)
     Chorus chorus_;
-    Delay delay_;
+    FMDelay delay_;
 
     Voice voices_[NUM_VOICES];
 

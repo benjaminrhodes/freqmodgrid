@@ -11,13 +11,13 @@ endif()
 include(${IPLUG2_DIR}/iPlug2.cmake)
 find_package(iPlug2 REQUIRED)
 
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
+
 iplug_add_plugin(${PROJECT_NAME}
   SOURCES
     src/iPlug/FreqmodGrid.cpp
     src/iPlug/FreqmodGrid.h
     src/iPlug/FreqmodGrid_DSP.h
-    src/iPlug/FreqmodGridGUI.h
-    src/iPlug/FreqmodGridGUI.cpp
     src/DSP/FMEngine.h
     src/DSP/FMEngine.cpp
     src/DSP/Operator.h
@@ -28,8 +28,4 @@ iplug_add_plugin(${PROJECT_NAME}
     resources/config.h
   LINK
     iPlug2::Extras::Synth
-)
-
-target_include_directories(${PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_SOURCE_DIR}/src
 )

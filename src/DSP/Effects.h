@@ -70,11 +70,11 @@ private:
     float output_;
 };
 
-class Delay {
+class FMDelay {
 public:
     static constexpr int MAX_BUFFER_SIZE = 192000; // 2s at 96kHz
 
-    Delay() : time_(0.25f), feedback_(0.3f), sampleRate_(48000.0f),
+    FMDelay() : time_(0.25f), feedback_(0.3f), sampleRate_(48000.0f),
               writePos_(0), output_(0.0f) {
         buffer_.resize(MAX_BUFFER_SIZE, 0.0f);
     }

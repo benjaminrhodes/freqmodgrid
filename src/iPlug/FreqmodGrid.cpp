@@ -4,11 +4,6 @@
 FreqmodGrid::FreqmodGrid(const InstanceInfo& info)
 : Plugin(info, MakeConfig(kNumParams, kNumPresets))
 {
-#if IPLUG_EDITOR
-  mMakeEditorFunc = [this]() {
-    return MakeEditor(this, PLUG_WIDTH, PLUG_HEIGHT);
-  };
-#endif
   // Operator 1
   GetParam(kParamOp1Ratio)->InitDouble("Op1 Ratio", 1.0, 0.25, 32.0, 0.01, "");
   GetParam(kParamOp1Level)->InitDouble("Op1 Level", 50., 0., 100., 1., "%");
@@ -93,15 +88,4 @@ void FreqmodGrid::OnParamChange(int paramIdx)
 {
   mDSP.SetParam(paramIdx, GetParam(paramIdx)->Value());
 }
-
-#if IPLUG_EDITOR
-void FreqmodGrid::CreateEditor(IGraphics** pGraphics)
-{
-  mMakeGraphicsFunc = [this]() {
-    return MakeGraphics(this, PLUG_WIDTH, PLUG_HEIGHT, PLUG_FPS, 1.);
-  };
-  
-  *pGraphics = new FreqmodGridGUI(mEditor, this, PLUG_WIDTH, PLUG_HEIGHT);
-}
-#endif
 #endif

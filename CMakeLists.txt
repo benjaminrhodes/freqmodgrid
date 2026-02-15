@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.20)
 project(FreqmodGrid VERSION 1.0.0)
 
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 if(NOT DEFINED IPLUG2_DIR)
   set(IPLUG2_DIR "${CMAKE_CURRENT_SOURCE_DIR}/iPlug2" CACHE PATH "iPlug2 root directory")
 endif()
@@ -13,7 +16,18 @@ iplug_add_plugin(${PROJECT_NAME}
     src/iPlug/FreqmodGrid.cpp
     src/iPlug/FreqmodGrid.h
     src/iPlug/FreqmodGrid_DSP.h
+    src/DSP/FMEngine.h
+    src/DSP/FMEngine.cpp
+    src/DSP/Operator.h
+    src/DSP/Envelope.h
+    src/DSP/Filter.h
+    src/DSP/LFO.h
+    src/DSP/Effects.h
     resources/config.h
   LINK
     iPlug2::Extras::Synth
+)
+
+target_include_directories(${PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_SOURCE_DIR}/src
 )

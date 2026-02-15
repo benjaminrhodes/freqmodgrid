@@ -210,7 +210,7 @@ A 6-operator FM synth with an innovative "grid" interface showing modulation rou
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                         Frequad FM                               │
+│                        FreqmodGrid                               │
 │                    6-Operator FM Synthesizer                    │
 ├─────────────────────────────────────────────────────────────────┤
 │  ┌─────────┐    ┌─────────┐    ┌─────────┐    ┌─────────┐      │
@@ -361,7 +361,7 @@ A 6-operator FM synth with an innovative "grid" interface showing modulation rou
 
 ```
 ┌──────────────────────────────────────────────────────────────────┐
-│  Frequad FM                                    [Preset ▼] [Rnd] │
+│  FreqmodGrid                                   [Preset ▼] [Rnd] │
 ├──────────────────────────────────────────────────────────────────┤
 │ ┌─────────────────────────────────────────────────────────────┐ │
 │ │                   ALGORITHM GRID                             │ │

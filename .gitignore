@@ -1,0 +1,33 @@
+# Build outputs
+build/
+*.o
+*.obj
+*.so
+*.dylib
+*.dll
+*.vst3
+*.vst
+
+# IDE
+.vscode/
+.idea/
+*.sln
+*.vcxproj
+CMakeCache.txt
+CMakeFiles/
+
+# Dependencies
+vst3sdk/
+deps/
+
+# macOS
+.DS_Store
+*.app
+
+# Documentation builds
+docs/_build/
+site/
+
+# Test outputs
+*.wav
+*.mp3

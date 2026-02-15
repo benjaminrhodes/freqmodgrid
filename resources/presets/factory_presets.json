@@ -1,0 +1,166 @@
+{
+  "plugin": "FreqmodGrid",
+  "version": "1.0.0",
+  "presets": [
+    {
+      "name": "Init",
+      "category": "Init",
+      "algorithm": 1,
+      "operators": [
+        {"ratio": 1.0, "level": 0.5, "feedback": 0.0},
+        {"ratio": 2.0, "level": 0.5, "feedback": 0.0},
+        {"ratio": 3.0, "level": 0.0, "feedback": 0.0},
+        {"ratio": 1.0, "level": 0.0, "feedback": 0.0},
+        {"ratio": 0.5, "level": 0.0, "feedback": 0.0},
+        {"ratio": 0.25, "level": 0.0, "feedback": 0.0}
+      ],
+      "filter": {"type": 0, "cutoff": 12000, "resonance": 0.0},
+      "envelope": {"attack": 0.01, "decay": 0.1, "sustain": 0.7, "release": 0.3},
+      "effects": {"chorus_rate": 1.0, "chorus_depth": 0.3, "delay_time": 0.25, "delay_feedback": 0.3}
+    },
+    {
+      "name": "Simple Lead",
+      "category": "Lead",
+      "algorithm": 2,
+      "operators": [
+        {"ratio": 1.0, "level": 0.6, "feedback": 0.2},
+        {"ratio": 2.0, "level": 0.5, "feedback": 0.0},
+        {"ratio": 3.0, "level": 0.4, "feedback": 0.0},
+        {"ratio": 4.0, "level": 0.3, "feedback": 0.0},
+        {"ratio": 5.0, "level": 0.2, "feedback": 0.0},
+        {"ratio": 6.0, "level": 0.1, "feedback": 0.0}
+      ],
+      "filter": {"type": 0, "cutoff": 10000, "resonance": 0.2},
+      "envelope": {"attack": 0.005, "decay": 0.2, "sustain": 0.6, "release": 0.2},
+      "effects": {"chorus_rate": 0.5, "chorus_depth": 0.1, "delay_time": 0.125, "delay_feedback": 0.2}
+    },
+    {
+      "name": "Warm Pad",
+      "category": "Pad",
+      "algorithm": 3,
+      "operators": [
+        {"ratio": 1.0, "level": 0.7, "feedback": 0.0},
+        {"ratio": 1.5, "level": 0.5, "feedback": 0.0},
+        {"ratio": 2.0, "level": 0.4, "feedback": 0.0},
+        {"ratio": 3.0, "level": 0.3, "feedback": 0.0},
+        {"ratio": 4.0, "level": 0.2, "feedback": 0.0},
+        {"ratio": 5.0, "level": 0.1, "feedback": 0.0}
+      ],
+      "filter": {"type": 0, "cutoff": 8000, "resonance": 0.1},
+      "envelope": {"attack": 0.5, "decay": 0.8, "sustain": 0.7, "release": 1.5},
+      "effects": {"chorus_rate": 0.3, "chorus_depth": 0.5, "delay_time": 0.375, "delay_feedback": 0.4}
+    },
+    {
+      "name": "Bell Tone",
+      "category": "Bell",
+      "algorithm": 1,
+      "operators": [
+        {"ratio": 1.0, "level": 0.5, "feedback": 0.0},
+        {"ratio": 2.0, "level": 0.5, "feedback": 0.0},
+        {"ratio": 3.0, "level": 0.5, "feedback": 0.0},
+        {"ratio": 4.0, "level": 0.4, "feedback": 0.0},
+        {"ratio": 5.0, "level": 0.3, "feedback": 0.0},
+        {"ratio": 6.0, "level": 0.2, "feedback": 0.0}
+      ],
+      "filter": {"type": 0, "cutoff": 6000, "resonance": 0.4},
+      "envelope": {"attack": 0.001, "decay": 1.5, "sustain": 0.0, "release": 2.0},
+      "effects": {"chorus_rate": 1.0, "chorus_depth": 0.2, "delay_time": 0.5, "delay_feedback": 0.5}
+    },
+    {
+      "name": "Pluck",
+      "category": "Keys",
+      "algorithm": 2,
+      "operators": [
+        {"ratio": 1.0, "level": 0.6, "feedback": 0.3},
+        {"ratio": 1.5, "level": 0.5, "feedback": 0.0},
+        {"ratio": 2.5, "level": 0.4, "feedback": 0.0},
+        {"ratio": 3.0, "level": 0.3, "feedback": 0.0},
+        {"ratio": 4.5, "level": 0.2, "feedback": 0.0},
+        {"ratio": 5.5, "level": 0.1, "feedback": 0.0}
+      ],
+      "filter": {"type": 0, "cutoff": 4000, "resonance": 0.3},
+      "envelope": {"attack": 0.001, "decay": 0.3, "sustain": 0.0, "release": 0.5},
+      "effects": {"chorus_rate": 0.0, "chorus_depth": 0.0, "delay_time": 0.25, "delay_feedback": 0.3}
+    },
+    {
+      "name": "Fat Bass",
+      "category": "Bass",
+      "algorithm": 5,
+      "operators": [
+        {"ratio": 1.0, "level": 0.8, "feedback": 0.2},
+        {"ratio": 2.0, "level": 0.6, "feedback": 0.1},
+        {"ratio": 1.0, "level": 0.7, "feedback": 0.2},
+        {"ratio": 2.0, "level": 0.5, "feedback": 0.1},
+        {"ratio": 1.0, "level": 0.0, "feedback": 0.0},
+        {"ratio": 2.0, "level": 0.0, "feedback": 0.0}
+      ],
+      "filter": {"type": 0, "cutoff": 2000, "resonance": 0.2},
+      "envelope": {"attack": 0.01, "decay": 0.2, "sustain": 0.5, "release": 0.3},
+      "effects": {"chorus_rate": 0.0, "chorus_depth": 0.0, "delay_time": 0.0, "delay_feedback": 0.0}
+    },
+    {
+      "name": "Sci-Fi FX",
+      "category": "FX",
+      "algorithm": 4,
+      "operators": [
+        {"ratio": 1.0, "level": 0.5, "feedback": 0.8},
+        {"ratio": 1.5, "level": 0.5, "feedback": 0.7},
+        {"ratio": 2.0, "level": 0.5, "feedback": 0.6},
+        {"ratio": 2.5, "level": 0.5, "feedback": 0.5},
+        {"ratio": 3.0, "level": 0.5, "feedback": 0.4},
+        {"ratio": 3.5, "level": 0.5, "feedback": 0.3}
+      ],
+      "filter": {"type": 1, "cutoff": 8000, "resonance": 0.5},
+      "envelope": {"attack": 1.0, "decay": 1.5, "sustain": 0.8, "release": 3.0},
+      "effects": {"chorus_rate": 5.0, "chorus_depth": 0.8, "delay_time": 0.75, "delay_feedback": 0.7}
+    },
+    {
+      "name": "Glassy Keys",
+      "category": "Keys",
+      "algorithm": 3,
+      "operators": [
+        {"ratio": 1.0, "level": 0.6, "feedback": 0.0},
+        {"ratio": 2.0, "level": 0.5, "feedback": 0.0},
+        {"ratio": 3.0, "level": 0.4, "feedback": 0.0},
+        {"ratio": 5.0, "level": 0.3, "feedback": 0.0},
+        {"ratio": 7.0, "level": 0.2, "feedback": 0.0},
+        {"ratio": 9.0, "level": 0.1, "feedback": 0.0}
+      ],
+      "filter": {"type": 0, "cutoff": 10000, "resonance": 0.1},
+      "envelope": {"attack": 0.005, "decay": 0.5, "sustain": 0.4, "release": 0.8},
+      "effects": {"chorus_rate": 2.0, "chorus_depth": 0.4, "delay_time": 0.375, "delay_feedback": 0.3}
+    },
+    {
+      "name": "Dark Drone",
+      "category": "Pad",
+      "algorithm": 6,
+      "operators": [
+        {"ratio": 0.5, "level": 0.7, "feedback": 0.3},
+        {"ratio": 0.75, "level": 0.6, "feedback": 0.2},
+        {"ratio": 1.0, "level": 0.5, "feedback": 0.1},
+        {"ratio": 1.25, "level": 0.5, "feedback": 0.1},
+        {"ratio": 1.5, "level": 0.4, "feedback": 0.0},
+        {"ratio": 2.0, "level": 0.3, "feedback": 0.0}
+      ],
+      "filter": {"type": 1, "cutoff": 5000, "resonance": 0.3},
+      "envelope": {"attack": 2.0, "decay": 2.0, "sustain": 0.8, "release": 4.0},
+      "effects": {"chorus_rate": 0.1, "chorus_depth": 0.6, "delay_time": 1.5, "delay_feedback": 0.6}
+    },
+    {
+      "name": "Brass Hit",
+      "category": "Lead",
+      "algorithm": 2,
+      "operators": [
+        {"ratio": 1.0, "level": 0.8, "feedback": 0.3},
+        {"ratio": 1.0, "level": 0.7, "feedback": 0.2},
+        {"ratio": 2.0, "level": 0.6, "feedback": 0.1},
+        {"ratio": 2.0, "level": 0.5, "feedback": 0.0},
+        {"ratio": 3.0, "level": 0.4, "feedback": 0.0},
+        {"ratio": 4.0, "level": 0.3, "feedback": 0.0}
+      ],
+      "filter": {"type": 0, "cutoff": 8000, "resonance": 0.2},
+      "envelope": {"attack": 0.005, "decay": 0.3, "sustain": 0.6, "release": 0.5},
+      "effects": {"chorus_rate": 0.0, "chorus_depth": 0.0, "delay_time": 0.125, "delay_feedback": 0.2}
+    }
+  ]
+}

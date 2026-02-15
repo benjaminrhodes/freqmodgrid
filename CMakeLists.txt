@@ -1,0 +1,19 @@
+cmake_minimum_required(VERSION 3.20)
+project(FreqmodGrid VERSION 1.0.0)
+
+if(NOT DEFINED IPLUG2_DIR)
+  set(IPLUG2_DIR "${CMAKE_CURRENT_SOURCE_DIR}/iPlug2" CACHE PATH "iPlug2 root directory")
+endif()
+
+include(${IPLUG2_DIR}/iPlug2.cmake)
+find_package(iPlug2 REQUIRED)
+
+iplug_add_plugin(${PROJECT_NAME}
+  SOURCES
+    src/iPlug/FreqmodGrid.cpp
+    src/iPlug/FreqmodGrid.h
+    src/iPlug/FreqmodGrid_DSP.h
+    resources/config.h
+  LINK
+    iPlug2::Extras::Synth
+)

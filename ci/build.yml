@@ -1,0 +1,88 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  release:
+    types: [created]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            artifact_name: FreqmodGrid-win64
+          - os: macos-latest
+            artifact_name: FreqmodGrid-macos
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install CMake
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: cmake
+          version: 3.28.0
+
+      - name: Setup VST3 SDK (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          git clone --depth 1 --branch v3.7.10 https://github.com/steinbergmedia/vst3sdk.git
+          cd vst3sdk
+          git submodule update --init --recursive
+
+      - name: Setup VST3 SDK (macOS)
+        if: matrix.os == 'macos-latest'
+        run: |
+          git clone --depth 1 --branch v3.7.10 https://github.com/steinbergmedia/vst3sdk.git
+          cd vst3sdk
+          git submodule update --init --recursive
+
+      - name: Configure
+        run: |
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release -DVST3_SDK_DIR="$GITHUB_WORKSPACE/vst3sdk"
+
+      - name: Build
+        run: |
+          cd build
+          cmake --build . --config Release --parallel
+
+      - name: Package
+        run: |
+          cd build
+          mkdir -p release
+          cp -r FreqmodGrid.vst3 release/ 2>/dev/null || true
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: build/release
+          retention-days: 30
+
+  release:
+    needs: build
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: artifacts/**/*.vst3
+          draft: true

@@ -8,6 +8,10 @@ const int kNumPresets = 1;
 #include "FreqmodGrid_DSP.h"
 #endif
 
+#if IPLUG_EDITOR
+#include "FreqmodGridGUI.h"
+#endif
+
 using namespace iplug;
 using namespace igraphics;
 
@@ -15,6 +19,10 @@ class FreqmodGrid final : public Plugin
 {
 public:
   FreqmodGrid(const InstanceInfo& info);
+
+#if IPLUG_EDITOR
+  void CreateEditor(IGraphics** pGraphics) override;
+#endif
 
 #if IPLUG_DSP
 public:

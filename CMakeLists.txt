@@ -16,6 +16,8 @@ iplug_add_plugin(${PROJECT_NAME}
     src/iPlug/FreqmodGrid.cpp
     src/iPlug/FreqmodGrid.h
     src/iPlug/FreqmodGrid_DSP.h
+    src/iPlug/FreqmodGridGUI.h
+    src/iPlug/FreqmodGridGUI.cpp
     src/DSP/FMEngine.h
     src/DSP/FMEngine.cpp
     src/DSP/Operator.h

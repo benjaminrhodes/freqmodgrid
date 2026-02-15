@@ -1,16 +1,16 @@
 #define PLUG_NAME "FreqmodGrid"
-#define PLUG_MFR "FreqMod"
+#define PLUG_MFR "Rhodes Resonance"
 #define PLUG_VERSION_HEX 0x00010000
 #define PLUG_VERSION_STR "1.0.0"
 #define PLUG_UNIQUE_ID 'FREQ'
-#define PLUG_MFR_ID 'Freq'
-#define PLUG_URL_STR "https://freqmod.com"
-#define PLUG_EMAIL_STR "support@freqmod.com"
-#define PLUG_COPYRIGHT_STR "Copyright 2026 FreqMod"
+#define PLUG_MFR_ID 'Rhds'
+#define PLUG_URL_STR "https://github.com/benjaminrhodes/freqmodgrid"
+#define PLUG_EMAIL_STR "support@freqmodgrid.com"
+#define PLUG_COPYRIGHT_STR "Copyright 2026 Rhodes Resonance"
 #define PLUG_CLASS_NAME FreqmodGrid
 
 #define BUNDLE_NAME "FreqmodGrid"
-#define BUNDLE_MFR "FreqMod"
+#define BUNDLE_MFR "Rhodes Resonance"
 #define BUNDLE_DOMAIN "com"
 
 #define PLUG_CHANNEL_IO "0-2"

@@ -1,6 +1,6 @@
 # FreqmodGrid
 
-A free, open-source 6-operator FM synthesizer plugin. Built with [iPlug2](https://github.com/iPlug2/iPlug2) and C++20.
+A free, open-source 6-operator FM synthesizer plugin by Rhodes Resonance. Built with [iPlug2](https://github.com/iPlug2/iPlug2) and C++20.
 
 FreqmodGrid makes FM synthesis accessible with 8 ready-made algorithms and a clean visual interface, letting you focus on sound design rather than signal flow.
 

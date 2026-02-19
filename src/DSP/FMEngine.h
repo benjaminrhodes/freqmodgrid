@@ -5,7 +5,8 @@
 #include "Envelope.h"
 #include "Filter.h"
 #include "LFO.h"
-#include "Effects.h"
+#include "StereoChorus.h"
+#include "StereoDelay.h"
 
 // Each algorithm defines: which operators modulate which, and which are carriers (go to output).
 // Operators are processed in the order specified by processOrder so modulators run before carriers.
@@ -200,6 +201,7 @@ public:
                 // Process envelope
                 voice.envelope.process();
                 float amp = voice.envelope.getLevel() * voice.velocity * masterVolume_;
+                amp *= (1.0f + voice.pressure * 0.5f);
 
                 // Process operators in algorithm order
                 const AlgorithmDef& algo = kAlgorithms[algorithm_];
@@ -251,15 +253,15 @@ public:
             // Soft clip to prevent harsh distortion from stacked voices
             mix *= 0.5f;
 
-            // Effects chain (global, not per-voice)
-            chorus_.process(mix);
-            float chorusOut = chorus_.getOutput();
+            // Effects chain (global, not per-voice) - stereo
+            float chorusL, chorusR;
+            chorus_.process(mix, chorusL, chorusR);
 
-            delay_.process(chorusOut);
-            float delayOut = delay_.getOutput();
+            float delayL, delayR;
+            delay_.process(chorusL + chorusR, delayL, delayR);
 
-            outputLeft[s] = delayOut;
-            outputRight[s] = delayOut;
+            outputLeft[s] = delayL;
+            outputRight[s] = delayR;
         }
     }
 
@@ -364,6 +366,10 @@ public:
     void setDelayFeedback(float fb) { delay_.setFeedback(fb); }
 
     void setMasterVolume(float vol) { masterVolume_ = vol; }
+    
+    void setVoiceBend(int note, float bendCents);
+    void setVoicePressure(int note, float pressure);
+    void setVoiceSlide(int note, float slideRate);
 
     // Getters
     float getOperatorRatio(int op) const {
@@ -402,6 +408,9 @@ private:
         float velocity;
         float frequency;
         unsigned long age;
+        float bendCents = 0.0f;
+        float pressure = 0.0f;
+        float slideRate = 0.0f;
         Operator operators[NUM_OPERATORS];
         Envelope envelope;
         Filter filter;
@@ -481,8 +490,8 @@ private:
     int lfoWave_[NUM_LFOS];
 
     // Global effects (post voice mixing)
-    Chorus chorus_;
-    FMDelay delay_;
+    StereoChorus chorus_;
+    StereoDelay delay_;
 
     Voice voices_[NUM_VOICES];
 

@@ -2,6 +2,7 @@
 
 #include "MidiSynth.h"
 #include "../DSP/FMEngine.h"
+#include "../DSP/Oversampler.h"
 
 using namespace iplug;
 
@@ -50,6 +51,7 @@ enum EParams
   kParamDelayFeedback,
   // Master
   kParamMasterVolume,
+  kParamOversample,
   kNumParams
 };
 
@@ -163,6 +165,11 @@ public:
       case kParamDelayFeedback:  mEngine.setDelayFeedback((float)value / 100.0); break;
 
       case kParamMasterVolume: mEngine.setMasterVolume((float)value / 100.0); break;
+      case kParamOversample:   
+        if (value < 0.5) mOversampler.setMode(OversampleMode::Off);
+        else if (value < 1.5) mOversampler.setMode(OversampleMode::x2);
+        else mOversampler.setMode(OversampleMode::x4);
+        break;
       default: break;
     }
   }
@@ -171,4 +178,5 @@ public:
   FMEngine mEngine;
   IMidiQueue mMidiQueue;
   std::vector<float> mTempL, mTempR;
+  Oversampler<float> mOversampler;
 };

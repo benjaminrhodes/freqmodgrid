@@ -18,6 +18,8 @@ iplug_add_plugin(${PROJECT_NAME}
     src/iPlug/FreqmodGrid.cpp
     src/iPlug/FreqmodGrid.h
     src/iPlug/FreqmodGrid_DSP.h
+    src/iPlug/PresetManager.cpp
+    src/iPlug/PresetManager.h
     src/DSP/FMEngine.h
     src/DSP/FMEngine.cpp
     src/DSP/Operator.h
@@ -25,6 +27,10 @@ iplug_add_plugin(${PROJECT_NAME}
     src/DSP/Filter.h
     src/DSP/LFO.h
     src/DSP/Effects.h
+    src/DSP/Constants.h
+    src/DSP/StereoChorus.h
+    src/DSP/StereoDelay.h
+    src/DSP/Oversampler.h
     resources/config.h
   LINK
     iPlug2::Extras::Synth

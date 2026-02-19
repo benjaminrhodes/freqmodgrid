@@ -101,23 +101,31 @@ FreqmodGrid::FreqmodGrid(const InstanceInfo& info)
     
     // Operators
     int opX = 10;
+    const char* opLabels[] = {"Op1", "Op2", "Op3", "Op4", "Op5", "Op6"};
     for (int op = 0; op < 6; op++) {
-      char opName[16];
-      sprintf(opName, "OP%d", op + 1);
-      auto opLabel = new ITextControl(IRECT(opX, y, opX + 110, y + 15), opName, 
+      auto opLabel = new ITextControl(IRECT(opX, y, opX + 70, y + 15), opLabels[op], 
         IText(10, EAlign::Center, IColor(255, 0, 212, 255)));
       pGraphics->AttachControl(opLabel);
       
       int ratioParam = kParamOp1Ratio + (op * 3);
       int levelParam = kParamOp1Level + (op * 3);
+      int feedbackParam = kParamOp1Feedback + (op * 3);
       
-      pGraphics->AttachControl(new IVKnobControl(IRECT(opX + 10, y + 18, opX + 50, y + 58), ratioParam, "Ratio", style));
-      pGraphics->AttachControl(new IVKnobControl(IRECT(opX + 60, y + 18, opX + 100, y + 58), levelParam, "Lev", style));
+      char ratioLabel[16];
+      sprintf(ratioLabel, "Op%d Ratio", op + 1);
+      char levelLabel[16];
+      sprintf(levelLabel, "Op%d Level", op + 1);
+      char feedbackLabel[16];
+      sprintf(feedbackLabel, "Op%d Fdbk", op + 1);
+      
+      pGraphics->AttachControl(new IVKnobControl(IRECT(opX + 5, y + 18, opX + 35, y + 48), ratioParam, ratioLabel, style));
+      pGraphics->AttachControl(new IVKnobControl(IRECT(opX + 40, y + 18, opX + 70, y + 48), levelParam, levelLabel, style));
+      pGraphics->AttachControl(new IVKnobControl(IRECT(opX + 75, y + 18, opX + 105, y + 48), feedbackParam, feedbackLabel, style));
       
       opX += 110;
     }
     
-    y += 70;
+    y += 60;
     
     // Filter
     auto filterLabel = new ITextControl(IRECT(10, y, 80, y + 15), "FILTER", 
@@ -131,24 +139,24 @@ FreqmodGrid::FreqmodGrid(const InstanceInfo& info)
     auto envLabel = new ITextControl(IRECT(200, y, 280, y + 15), "ENVELOPE", 
       IText(10, IColor(255, 0, 212, 255)));
     pGraphics->AttachControl(envLabel);
-    pGraphics->AttachControl(new IVKnobControl(IRECT(200, y + 18, 235, y + 50), kParamAttack, "A", style));
-    pGraphics->AttachControl(new IVKnobControl(IRECT(240, y + 18, 275, y + 50), kParamDecay, "D", style));
-    pGraphics->AttachControl(new IVKnobControl(IRECT(280, y + 18, 315, y + 50), kParamSustain, "S", style));
-    pGraphics->AttachControl(new IVKnobControl(IRECT(320, y + 18, 355, y + 50), kParamRelease, "R", style));
+    pGraphics->AttachControl(new IVKnobControl(IRECT(200, y + 18, 235, y + 50), kParamAttack, "Attack", style));
+    pGraphics->AttachControl(new IVKnobControl(IRECT(240, y + 18, 275, y + 50), kParamDecay, "Decay", style));
+    pGraphics->AttachControl(new IVKnobControl(IRECT(280, y + 18, 315, y + 50), kParamSustain, "Sustain", style));
+    pGraphics->AttachControl(new IVKnobControl(IRECT(320, y + 18, 355, y + 50), kParamRelease, "Release", style));
     
     // LFO 1
     auto lfo1Label = new ITextControl(IRECT(380, y, 440, y + 15), "LFO 1", 
       IText(10, IColor(255, 0, 212, 255)));
     pGraphics->AttachControl(lfo1Label);
-    pGraphics->AttachControl(new IVKnobControl(IRECT(380, y + 18, 420, y + 50), kParamLFO1Rate, "Rate", style));
-    pGraphics->AttachControl(new IVKnobControl(IRECT(425, y + 18, 465, y + 50), kParamLFO1Depth, "Depth", style));
+    pGraphics->AttachControl(new IVKnobControl(IRECT(380, y + 18, 420, y + 50), kParamLFO1Rate, "LFO1 Rate", style));
+    pGraphics->AttachControl(new IVKnobControl(IRECT(425, y + 18, 465, y + 50), kParamLFO1Depth, "LFO1 Depth", style));
     
     // LFO 2
     auto lfo2Label = new ITextControl(IRECT(490, y, 550, y + 15), "LFO 2", 
       IText(10, IColor(255, 0, 212, 255)));
     pGraphics->AttachControl(lfo2Label);
-    pGraphics->AttachControl(new IVKnobControl(IRECT(490, y + 18, 530, y + 50), kParamLFO2Rate, "Rate", style));
-    pGraphics->AttachControl(new IVKnobControl(IRECT(535, y + 18, 575, y + 50), kParamLFO2Depth, "Depth", style));
+    pGraphics->AttachControl(new IVKnobControl(IRECT(490, y + 18, 530, y + 50), kParamLFO2Rate, "LFO2 Rate", style));
+    pGraphics->AttachControl(new IVKnobControl(IRECT(535, y + 18, 575, y + 50), kParamLFO2Depth, "LFO2 Depth", style));
     
     y += 65;
     
@@ -156,10 +164,10 @@ FreqmodGrid::FreqmodGrid(const InstanceInfo& info)
     auto fxLabel = new ITextControl(IRECT(10, y, 100, y + 15), "EFFECTS", 
       IText(10, IColor(255, 0, 212, 255)));
     pGraphics->AttachControl(fxLabel);
-    pGraphics->AttachControl(new IVKnobControl(IRECT(10, y + 18, 55, y + 55), kParamChorusRate, "Ch Rt", style));
-    pGraphics->AttachControl(new IVKnobControl(IRECT(60, y + 18, 105, y + 55), kParamChorusDepth, "Ch Dp", style));
-    pGraphics->AttachControl(new IVKnobControl(IRECT(110, y + 18, 155, y + 55), kParamDelayTime, "Del T", style));
-    pGraphics->AttachControl(new IVKnobControl(IRECT(160, y + 18, 205, y + 55), kParamDelayFeedback, "Del F", style));
+    pGraphics->AttachControl(new IVKnobControl(IRECT(10, y + 18, 55, y + 55), kParamChorusRate, "Ch Rate", style));
+    pGraphics->AttachControl(new IVKnobControl(IRECT(60, y + 18, 105, y + 55), kParamChorusDepth, "Ch Depth", style));
+    pGraphics->AttachControl(new IVKnobControl(IRECT(110, y + 18, 155, y + 55), kParamDelayTime, "Delay Time", style));
+    pGraphics->AttachControl(new IVKnobControl(IRECT(160, y + 18, 205, y + 55), kParamDelayFeedback, "Delay Fdbk", style));
     
     // Master
     auto masterLabel = new ITextControl(IRECT(250, y, 320, y + 15), "MASTER", 

@@ -6,6 +6,7 @@ const int kNumPresets = 1;
 
 #if IPLUG_DSP
 #include "FreqmodGrid_DSP.h"
+#include "PresetManager.h"
 #endif
 
 using namespace iplug;
@@ -25,5 +26,6 @@ public:
 
 private:
   FreqmodGridDSP<sample> mDSP {16};
+  PresetManager mPresetManager;
 #endif
 };

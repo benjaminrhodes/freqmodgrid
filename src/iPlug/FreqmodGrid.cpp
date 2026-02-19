@@ -65,6 +65,11 @@ FreqmodGrid::FreqmodGrid(const InstanceInfo& info)
 
   // Master
   GetParam(kParamMasterVolume)->InitDouble("Master Volume", 70., 0., 100., 1., "%");
+  GetParam(kParamOversample)->InitEnum("Oversample", 0, 3, "", IParam::kFlagNone, "", "Off,2x,4x");
+  
+  // Initialize preset manager
+  mPresetManager.loadFactoryPresets("resources/presets/factory_presets.json");
+  mPresetManager.loadUserPresets();
 
 #if IPLUG_EDITOR
   mMakeGraphicsFunc = [&]() {
@@ -174,6 +179,12 @@ FreqmodGrid::FreqmodGrid(const InstanceInfo& info)
       IText(10, IColor(255, 0, 212, 255)));
     pGraphics->AttachControl(masterLabel);
     pGraphics->AttachControl(new IVKnobControl(IRECT(250, y + 18, 320, y + 65), kParamMasterVolume, "Vol", style));
+    
+    // Oversampling dropdown
+    auto osLabel = new ITextControl(IRECT(340, y, 390, y + 15), "OS", 
+      IText(10, IColor(255, 0, 212, 255)));
+    pGraphics->AttachControl(osLabel);
+    pGraphics->AttachControl(new IComboBoxControl(IRECT(340, y + 18, 410, y + 40), kParamOversample, style));
     
     // Randomize button
     pGraphics->AttachControl(new IVButtonControl(IRECT(340, y + 25, 430, y + 50),
